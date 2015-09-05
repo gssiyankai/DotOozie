@@ -3,7 +3,7 @@ digraph G {
   decision1 [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   success [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   fail [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
-  start -> decision1;
-  decision1 -> success;
-  decision1 -> fail;
+  start -> decision1 [ arrowsize="0.5" ];
+  decision1 -> success [ arrowsize="0.5" ];
+  decision1 -> fail [ arrowsize="0.5" ];
 }

@@ -6,12 +6,12 @@ digraph G {
   success [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   fail [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   secondparalleljob [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
-  start -> forking;
-  forking -> firstparalleljob;
-  forking -> secondparalleljob;
-  firstparalleljob -> joining;
-  firstparalleljob -> fail;
-  joining -> success;
-  secondparalleljob -> joining;
-  secondparalleljob -> fail;
+  start -> forking [ arrowsize="0.5" ];
+  forking -> firstparalleljob [ arrowsize="0.5" ];
+  forking -> secondparalleljob [ arrowsize="0.5" ];
+  firstparalleljob -> joining [ arrowsize="0.5" ];
+  firstparalleljob -> fail [ arrowsize="0.5" ];
+  joining -> success [ arrowsize="0.5" ];
+  secondparalleljob -> joining [ arrowsize="0.5" ];
+  secondparalleljob -> fail [ arrowsize="0.5" ];
 }

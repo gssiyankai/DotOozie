@@ -9,7 +9,7 @@ public class VertexAttributeProvider implements ComponentAttributeProvider<Verte
 
     @Override
     public Map<String, String> getComponentAttributes(Vertex vertex) {
-        HashMap<String, String> attributes = new HashMap<>();
+        Map<String, String> attributes = new HashMap<>();
         attributes.put("shape", "box");
         attributes.put("style", "rounded,filled");
         attributes.put("fillcolor", vertexFillColor(vertex));

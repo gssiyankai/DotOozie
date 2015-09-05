@@ -5,11 +5,11 @@ digraph G {
   action2 [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   success [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   fail [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
-  start -> action1;
-  action1 -> decision1;
-  action1 -> fail;
-  decision1 -> action2;
-  decision1 -> success;
-  action2 -> success;
-  action2 -> fail;
+  start -> action1 [ arrowsize="0.5" ];
+  action1 -> decision1 [ arrowsize="0.5" ];
+  action1 -> fail [ arrowsize="0.5" ];
+  decision1 -> action2 [ arrowsize="0.5" ];
+  decision1 -> success [ arrowsize="0.5" ];
+  action2 -> success [ arrowsize="0.5" ];
+  action2 -> fail [ arrowsize="0.5" ];
 }

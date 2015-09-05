@@ -21,7 +21,10 @@ public class DotOozie {
 
     public DotOozie exportTo(String outputFile) throws Exception {
         try (Writer writer = new FileWriter(outputFile)) {
-            DOTExporter exporter = new DOTExporter(new StringNameProvider<>(), null, null, new VertexAttributeProvider(), null);
+            DOTExporter exporter = new DOTExporter(new StringNameProvider<>(),
+                                                   null, null,
+                                                   new VertexAttributeProvider(),
+                                                   new EdgeAttributeProvider());
             exporter.export(writer, graph);
         }
         return this;
