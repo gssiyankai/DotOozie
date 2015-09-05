@@ -4,6 +4,7 @@ import org.jgraph.graph.DefaultEdge;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
@@ -13,12 +14,30 @@ import java.io.InputStream;
 
 class GraphGenerator {
 
+    static final String WORKFLOW_APP = "workflow-app";
+    static final String START = "start";
+    static final String END = "end";
+    static final String AT = "@";
+    static final String NAME = "name";
+    static final String TO = "to";
+    static final String KILL = "kill";
+    static final String FORK = "fork";
+    static final String PATH = "path";
+    static final String JOIN = "join";
+    static final String ACTION = "action";
+    static final String OK = "ok";
+    static final String ERROR = "error";
+    static final String DECISION = "decision";
+    static final String SWITCH = "switch";
+    static final String CASE = "case";
+    static final String DEFAULT = "default";
+
     private final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
     private final XPathFactory xPathFactory = XPathFactory.newInstance();
-    private DirectedGraph<Node, DefaultEdge> graph;
+    private DirectedGraph<Vertex, DefaultEdge> graph;
     private Document doc;
 
-    public DirectedGraph<Node, DefaultEdge> constructGraph(InputStream workflow) throws Exception {
+    public DirectedGraph<Vertex, DefaultEdge> constructGraph(InputStream workflow) throws Exception {
         graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         doc = documentBuilderFactory.newDocumentBuilder().parse(workflow);
 
@@ -34,10 +53,8 @@ class GraphGenerator {
     }
 
     private String addStartNode() throws Exception {
-        XPathExpression expr = nodeToXPathExpression("start");
-        String next = expr.evaluate(doc);
-
-        addEdge("start", next);
+        String next = startNodeToValue();
+        addEdge(START, next);
         return next;
     }
 
@@ -64,9 +81,7 @@ class GraphGenerator {
     }
 
     private boolean addKillNode(String node) throws Exception {
-        XPathExpression expr = nodeXPathExpression("kill[@name='" + node + "']");
-        org.w3c.dom.Node kill = (org.w3c.dom.Node) expr.evaluate(doc, XPathConstants.NODE);
-
+        Node kill = killNode(node);
         if (kill != null) {
             return true;
         } else {
@@ -75,9 +90,7 @@ class GraphGenerator {
     }
 
     private boolean addEndNode(String node) throws Exception {
-        XPathExpression expr = nodeNameXPathExpression("end");
-        String name = expr.evaluate(doc);
-
+        String name = nodeEndName();
         if (!name.isEmpty() && name.equals(node)) {
             return true;
         } else {
@@ -86,13 +99,11 @@ class GraphGenerator {
     }
 
     private boolean addForkNode(String node) throws Exception {
-        XPathExpression expr = nodeXPathExpression("fork[@name='" + node + "']");
-        org.w3c.dom.Node next = (org.w3c.dom.Node) expr.evaluate(doc, XPathConstants.NODE);
+        Node next = forkNode(node);
 
         if (next != null) {
             for (int i = 0; i < next.getChildNodes().getLength(); ++i) {
-                expr = nodeXPathExpression("fork[@name='" + node + "']/path[" + i + "]/@start");
-                String nextNode = expr.evaluate(doc);
+                String nextNode = forkPathStartValue(node, i);
 
                 if (!nextNode.isEmpty()) {
                     addEdge(node, nextNode);
@@ -107,13 +118,11 @@ class GraphGenerator {
     }
 
     private boolean addJoinNode(String node) throws Exception {
-        XPathExpression expr = nodeToXPathExpression("join[@name='" + node + "']");
-        String next = expr.evaluate(doc);
+        String next = joinNodeToValue(node);
 
         if (!next.isEmpty()) {
             addEdge(node, next);
             addNextNode(next);
-
             return true;
         } else {
             return false;
@@ -121,16 +130,13 @@ class GraphGenerator {
     }
 
     private boolean addActionNode(String node) throws Exception {
-        XPathExpression expr = nodeToXPathExpression("action[@name='" + node + "']/ok");
-        String next = expr.evaluate(doc);
+        String next = actionOkNodeToValue(node);
 
         if (!next.isEmpty()) {
             addEdge(node, next);
             addNextNode(next);
 
-            expr = nodeToXPathExpression("action[@name='" + node + "']/error");
-            next = expr.evaluate(doc);
-
+            next = actionErrorNodeToValue(node);
             if (!next.isEmpty()) {
                 addEdge(node, next);
                 addNextNode(next);
@@ -143,13 +149,11 @@ class GraphGenerator {
     }
 
     private boolean addDecisionNode(String node) throws Exception {
-        XPathExpression expr = nodeXPathExpression("decision[@name='" + node + "']/switch");
-        org.w3c.dom.Node next = (org.w3c.dom.Node) expr.evaluate(doc, XPathConstants.NODE);
+        Node next = decisionSwitchNode(node);
 
         if (next != null) {
             for (int i = 0; i < next.getChildNodes().getLength(); ++i) {
-                expr = nodeToXPathExpression("decision[@name='" + node + "']/switch/case[" + i + "]");
-                String nextNode = expr.evaluate(doc);
+                String nextNode = decisionSwitchCaseToValue(node, i);
 
                 if (!nextNode.isEmpty()) {
                     addEdge(node, nextNode);
@@ -157,8 +161,7 @@ class GraphGenerator {
                 }
             }
 
-            expr = nodeToXPathExpression("decision[@name='" + node + "']/switch/default");
-            String nextNode = expr.evaluate(doc);
+            String nextNode = decisionSwitchDefaultToValue(node);
 
             if (!nextNode.isEmpty()) {
                 addEdge(node, nextNode);
@@ -171,24 +174,96 @@ class GraphGenerator {
         }
     }
 
+    private String startNodeToValue() throws Exception {
+        return nodeToValue(START);
+    }
+
+    private String forkPathStartValue(String node, int i) throws Exception {
+        return nodeStartXPathExpression(nodeXPath(FORK, node) + "/" + PATH + "[" + i + "]").evaluate(doc);
+    }
+
+    private String joinNodeToValue(String node) throws Exception {
+        return nodeToValue(nodeXPath(JOIN, node));
+    }
+
+    private String actionOkNodeToValue(String node) throws Exception {
+        return nodeToValue(nodeXPath(ACTION, node) + "/" + OK);
+    }
+
+    private String actionErrorNodeToValue(String node) throws Exception {
+        return nodeToValue(nodeXPath(ACTION, node) + "/" + ERROR);
+    }
+
+    private String nodeToValue(String node) throws Exception {
+        return nodeToXPathExpression(node).evaluate(doc);
+    }
+
+    private String nodeEndName() throws Exception {
+        return nodeNameValue(END);
+    }
+
+    private String nodeNameValue(String node) throws Exception {
+        return nodeNameXPathExpression(node).evaluate(doc);
+    }
+
+    private String decisionSwitchCaseToValue(String node, int i) throws Exception {
+        return nodeToValue(decisionSwitchNodeXPath(node) + "/" + CASE + "[" + i + "]");
+    }
+
+    private String decisionSwitchDefaultToValue(String node) throws Exception {
+        return nodeToValue(decisionSwitchNodeXPath(node) + "/" + DEFAULT);
+    }
+
+    private Node forkNode(String node) throws Exception {
+        return node(FORK, node);
+    }
+
+    private Node killNode(String node) throws Exception {
+        return node(KILL, node);
+    }
+
+    private Node decisionSwitchNode(String node) throws Exception {
+        return (Node) nodeXPathExpression(decisionSwitchNodeXPath(node)).evaluate(doc, XPathConstants.NODE);
+    }
+
+    private String decisionSwitchNodeXPath(String node) {
+        return nodeXPath(DECISION, node) + "/" + SWITCH;
+    }
+
+    private Node node(String node, String name) throws Exception {
+        return (Node) nodeXPathExpression(nodeXPath(node, name)).evaluate(doc, XPathConstants.NODE);
+    }
+
+    private String nodeXPath(String node, String name) {
+        return node + "[" + AT + NAME + "='" + name + "']";
+    }
+
     private XPathExpression nodeToXPathExpression(String node) throws Exception {
-        return nodeXPathExpression(node + "/@to");
+        return nodeAttributeXPathExpression(node, TO);
+    }
+
+    private XPathExpression nodeStartXPathExpression(String node) throws Exception {
+        return nodeAttributeXPathExpression(node, START);
     }
 
     private XPathExpression nodeNameXPathExpression(String node) throws Exception {
-        return nodeXPathExpression(node + "/@name");
+        return nodeAttributeXPathExpression(node, NAME);
+    }
+
+    private XPathExpression nodeAttributeXPathExpression(String node, String attribute) throws Exception {
+        return nodeXPathExpression(node + "/" + AT + attribute);
     }
 
     private XPathExpression nodeXPathExpression(String node) throws Exception {
-        return xPathFactory.newXPath().compile("/workflow-app/" + node);
+        return xPathFactory.newXPath().compile("/" + WORKFLOW_APP + "/" + node);
     }
 
     private void addEdge(String node1, String node2) {
-        Node startNode = new Node(node1);
-        Node toNode = new Node(node2);
-        graph.addVertex(startNode);
-        graph.addVertex(toNode);
-        graph.addEdge(startNode, toNode);
+        Vertex v1 = new Vertex(node1);
+        Vertex v2 = new Vertex(node2);
+        graph.addVertex(v1);
+        graph.addVertex(v2);
+        graph.addEdge(v1, v2);
     }
 
 }

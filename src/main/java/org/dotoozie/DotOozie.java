@@ -12,7 +12,7 @@ import java.io.Writer;
 
 public class DotOozie {
 
-    private DirectedGraph<Node, DefaultEdge> graph;
+    private DirectedGraph<Vertex, DefaultEdge> graph;
 
     public DotOozie from(InputStream workflow) throws Exception {
         graph = new GraphGenerator().constructGraph(workflow);

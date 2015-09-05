@@ -2,11 +2,11 @@ package org.dotoozie;
 
 import java.util.Objects;
 
-public class Node {
+public class Vertex {
 
     private final String id;
 
-    public Node(String id) {
+    public Vertex(String id) {
         this.id = id;
     }
 
@@ -14,8 +14,8 @@ public class Node {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Node node = (Node) o;
-        return Objects.equals(id, node.id);
+        Vertex vertex = (Vertex) o;
+        return Objects.equals(id, vertex.id);
     }
 
     @Override
