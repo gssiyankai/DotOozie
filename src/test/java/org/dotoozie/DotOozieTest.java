@@ -20,34 +20,35 @@ public class DotOozieTest {
 
     @Test
     public void it_exports_empty_workflow() throws Exception {
-        it_exports_workflow("empty_workflow.xml", "empty_workflow.dot");
+        it_exports_workflow("empty");
     }
 
     @Test
     public void it_exports_action_workflow() throws Exception {
-        it_exports_workflow("action_workflow.xml", "action_workflow.dot");
+        it_exports_workflow("action");
     }
 
     @Test
     public void it_exports_decision_workflow() throws Exception {
-        it_exports_workflow("decision_workflow.xml", "decision_workflow.dot");
+        it_exports_workflow("decision");
     }
 
     @Test
     public void it_exports_simple_workflow() throws Exception {
-        it_exports_workflow("simple_workflow.xml", "simple_workflow.dot");
+        it_exports_workflow("simple");
     }
 
     @Test
     public void it_exports_forkjoin_workflow() throws Exception {
-        it_exports_workflow("forkjoin_workflow.xml", "forkjoin_workflow.dot");
+        it_exports_workflow("forkjoin");
     }
 
-    private void it_exports_workflow(String workflowFile, String expectedDotFile) throws Exception {
+    private void it_exports_workflow(String prefix) throws Exception {
         File dot = File.createTempFile("worflow", "dot");
-        dotOozie.export(getClass().getResourceAsStream("/" + workflowFile), dot.getAbsolutePath());
-        assertEquals(IOUtils.toString(getClass().getResourceAsStream("/" + expectedDotFile)),
-                IOUtils.toString(new FileReader(dot.getAbsolutePath())));
+        dotOozie.from(getClass().getResourceAsStream("/" + prefix + "_workflow.xml"))
+                .exportTo(dot.getAbsolutePath());
+        assertEquals(IOUtils.toString(getClass().getResourceAsStream("/" + prefix + "_workflow.dot")),
+                     IOUtils.toString(new FileReader(dot.getAbsolutePath())));
     }
 
 }
