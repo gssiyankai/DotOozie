@@ -1,0 +1,28 @@
+<workflow-app xmlns='uri:oozie:workflow:0.1' name='myworkflow'>
+
+    <start to="action1"/>
+
+    <action name="action1">
+        <ok to="decision1" />
+        <error to="fail" />
+    </action>
+
+    <decision name="decision1">
+        <switch>
+            <case to="action2">
+                ${prop} == 0
+            </case>
+            <default to="success"/>
+        </switch>
+    </decision>
+
+    <action name="action2">
+        <ok to="success" />
+        <error to="fail" />
+    </action>
+
+    <kill name="fail"/>
+
+    <end name='success' />
+
+</workflow-app>

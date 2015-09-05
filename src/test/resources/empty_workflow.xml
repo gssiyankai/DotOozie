@@ -1,0 +1,7 @@
+<workflow-app xmlns='uri:oozie:workflow:0.1' name='myworkflow'>
+
+    <start to="success"/>
+
+    <end name='success' />
+
+</workflow-app>

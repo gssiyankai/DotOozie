@@ -1,0 +1,9 @@
+digraph G {
+  start;
+  action1;
+  success;
+  fail;
+  start -> action1;
+  action1 -> success;
+  action1 -> fail;
+}
