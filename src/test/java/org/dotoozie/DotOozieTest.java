@@ -38,6 +38,11 @@ public class DotOozieTest {
         it_exports_workflow("simple_workflow.xml", "simple_workflow.dot");
     }
 
+    @Test
+    public void it_exports_forkjoin_workflow() throws Exception {
+        it_exports_workflow("forkjoin_workflow.xml", "forkjoin_workflow.dot");
+    }
+
     private void it_exports_workflow(String workflowFile, String expectedDotFile) throws Exception {
         File dot = File.createTempFile("worflow", "dot");
         dotOozie.export(getClass().getResourceAsStream("/" + workflowFile), dot.getAbsolutePath());

@@ -60,6 +60,12 @@ public class DotOozie {
             success = addEndNode(g, doc, node);
         }
         if (!success) {
+            success = addForkNode(g, doc, node);
+        }
+        if (!success) {
+            success = addJoinNode(g, doc, node);
+        }
+        if (!success) {
             success = addActionNode(g, doc, node);
         }
         if (!success) {
@@ -67,6 +73,17 @@ public class DotOozie {
         }
         if (!success) {
             throw new RuntimeException(String.format("Failed to add node '%s'", node));
+        }
+    }
+
+    private boolean addKillNode(DirectedGraph<Node, DefaultEdge> g, Document doc, String node) throws Exception {
+        XPathExpression expr = nodeXPathExpression("kill[@name='" + node + "']");
+        org.w3c.dom.Node kill = (org.w3c.dom.Node) expr.evaluate(doc, XPathConstants.NODE);
+
+        if (kill != null) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -81,11 +98,35 @@ public class DotOozie {
         }
     }
 
-    private boolean addKillNode(DirectedGraph<Node, DefaultEdge> g, Document doc, String node) throws Exception {
-        XPathExpression expr = nodeXPathExpression("kill[@name='" + node + "']");
-        org.w3c.dom.Node kill = (org.w3c.dom.Node) expr.evaluate(doc, XPathConstants.NODE);
+    private boolean addForkNode(DirectedGraph<Node, DefaultEdge> g, Document doc, String node) throws Exception {
+        XPathExpression expr = nodeXPathExpression("fork[@name='" + node + "']");
+        org.w3c.dom.Node next = (org.w3c.dom.Node) expr.evaluate(doc, XPathConstants.NODE);
 
-        if (kill != null) {
+        if (next != null) {
+            for (int i = 0; i < next.getChildNodes().getLength(); ++i) {
+                expr = nodeXPathExpression("fork[@name='" + node + "']/path[" + i + "]/@start");
+                String nextNode = expr.evaluate(doc);
+
+                if (!nextNode.isEmpty()) {
+                    addEdge(g, node, nextNode);
+                    addNextNode(g, doc, nextNode);
+                }
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean addJoinNode(DirectedGraph<Node, DefaultEdge> g, Document doc, String node) throws Exception {
+        XPathExpression expr = nodeToXPathExpression("join[@name='" + node + "']");
+        String next = expr.evaluate(doc);
+
+        if (!next.isEmpty()) {
+            addEdge(g, node, next);
+            addNextNode(g, doc, next);
+
             return true;
         } else {
             return false;

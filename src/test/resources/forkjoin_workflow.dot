@@ -1,0 +1,17 @@
+digraph G {
+  start;
+  forking;
+  firstparalleljob;
+  joining;
+  success;
+  fail;
+  secondparalleljob;
+  start -> forking;
+  forking -> firstparalleljob;
+  firstparalleljob -> joining;
+  joining -> success;
+  firstparalleljob -> fail;
+  forking -> secondparalleljob;
+  secondparalleljob -> joining;
+  secondparalleljob -> fail;
+}

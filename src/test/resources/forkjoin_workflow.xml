@@ -1,0 +1,26 @@
+<workflow-app xmlns='uri:oozie:workflow:0.1' name='myworkflow'>
+
+    <start to="forking"/>
+
+    <fork name="forking">
+        <path start="firstparalleljob"/>
+        <path start="secondparalleljob"/>
+    </fork>
+
+    <action name="firstparalleljob">
+        <ok to="joining"/>
+        <error to="fail"/>
+    </action>
+
+    <action name="secondparalleljob">
+        <ok to="joining"/>
+        <error to="fail"/>
+    </action>
+
+    <join name="joining" to="success"/>
+
+    <kill name="fail"/>
+
+    <end name='success' />
+
+</workflow-app>
