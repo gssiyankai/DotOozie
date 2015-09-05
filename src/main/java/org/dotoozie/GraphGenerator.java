@@ -11,6 +11,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import java.io.InputStream;
+import java.util.*;
 
 class GraphGenerator {
 
@@ -34,31 +35,40 @@ class GraphGenerator {
 
     private final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
     private final XPathFactory xPathFactory = XPathFactory.newInstance();
-    private DirectedGraph<Vertex, DefaultEdge> graph;
+    private final Map<String, Vertex> vertices = new LinkedHashMap<>();
+    private final Map<Vertex, List<Vertex>> edges = new LinkedHashMap<>();
     private Document doc;
 
     public DirectedGraph<Vertex, DefaultEdge> constructGraph(InputStream workflow) throws Exception {
-        graph = new DefaultDirectedGraph<>(DefaultEdge.class);
         doc = documentBuilderFactory.newDocumentBuilder().parse(workflow);
 
-        addNodes();
+        parseNodes();
 
+        DirectedGraph<Vertex, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        for (Vertex vertex : vertices.values()) {
+            graph.addVertex(vertex);
+        }
+        for (Map.Entry<Vertex, List<Vertex>> edge : edges.entrySet()) {
+            for (Vertex vertex : edge.getValue()) {
+                graph.addEdge(edge.getKey(), vertex);
+            }
+        }
         return graph;
     }
 
-    private void addNodes() throws Exception {
-        String next = addStartNode();
+    private void parseNodes() throws Exception {
+        String next = parseStartNode();
 
-        addNextNode(next);
+        parseNextNode(next);
     }
 
-    private String addStartNode() throws Exception {
+    private String parseStartNode() throws Exception {
         String next = startNodeToValue();
-        addEdge(START, next);
+        addVerticesAndEdge(START, VertexType.START, next);
         return next;
     }
 
-    private void addNextNode(String node) throws Exception {
+    private void parseNextNode(String node) throws Exception {
         boolean success = addKillNode(node);
         if (!success) {
             success = addEndNode(node);
@@ -106,8 +116,8 @@ class GraphGenerator {
                 String nextNode = forkPathStartValue(node, i);
 
                 if (!nextNode.isEmpty()) {
-                    addEdge(node, nextNode);
-                    addNextNode(nextNode);
+                    addVerticesAndEdge(node, VertexType.FORK, nextNode);
+                    parseNextNode(nextNode);
                 }
             }
 
@@ -121,8 +131,8 @@ class GraphGenerator {
         String next = joinNodeToValue(node);
 
         if (!next.isEmpty()) {
-            addEdge(node, next);
-            addNextNode(next);
+            addVerticesAndEdge(node, VertexType.JOIN, next);
+            parseNextNode(next);
             return true;
         } else {
             return false;
@@ -133,13 +143,13 @@ class GraphGenerator {
         String next = actionOkNodeToValue(node);
 
         if (!next.isEmpty()) {
-            addEdge(node, next);
-            addNextNode(next);
+            addVerticesAndEdge(node, VertexType.ACTION, next);
+            parseNextNode(next);
 
             next = actionErrorNodeToValue(node);
             if (!next.isEmpty()) {
-                addEdge(node, next);
-                addNextNode(next);
+                addVerticesAndEdge(node, VertexType.ACTION, next);
+                parseNextNode(next);
             }
 
             return true;
@@ -156,16 +166,16 @@ class GraphGenerator {
                 String nextNode = decisionSwitchCaseToValue(node, i);
 
                 if (!nextNode.isEmpty()) {
-                    addEdge(node, nextNode);
-                    addNextNode(nextNode);
+                    addVerticesAndEdge(node, VertexType.DECISION, nextNode);
+                    parseNextNode(nextNode);
                 }
             }
 
             String nextNode = decisionSwitchDefaultToValue(node);
 
             if (!nextNode.isEmpty()) {
-                addEdge(node, nextNode);
-                addNextNode(nextNode);
+                addVerticesAndEdge(node, VertexType.DECISION, nextNode);
+                parseNextNode(nextNode);
             }
 
             return true;
@@ -258,12 +268,25 @@ class GraphGenerator {
         return xPathFactory.newXPath().compile("/" + WORKFLOW_APP + "/" + node);
     }
 
-    private void addEdge(String node1, String node2) {
-        Vertex v1 = new Vertex(node1);
-        Vertex v2 = new Vertex(node2);
-        graph.addVertex(v1);
-        graph.addVertex(v2);
-        graph.addEdge(v1, v2);
+    private void addVerticesAndEdge(String node1, VertexType type1, String node2) {
+        Vertex v1 = vertices.get(node1);
+        if (v1 == null) {
+            v1 = new Vertex(node1);
+            vertices.put(node1, v1);
+        }
+        v1.type(type1);
+        Vertex v2 = vertices.get(node2);
+        if (v2 == null) {
+            v2 = new Vertex(node2);
+            vertices.put(node2, v2);
+        }
+
+        List<Vertex> connectedVertices = edges.get(v1);
+        if (connectedVertices == null) {
+            connectedVertices = new ArrayList<>();
+            edges.put(v1, connectedVertices);
+        }
+        connectedVertices.add(v2);
     }
 
 }

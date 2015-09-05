@@ -2,12 +2,22 @@ package org.dotoozie;
 
 import java.util.Objects;
 
-public class Vertex {
+class Vertex {
 
     private final String id;
+    private VertexType type;
 
     public Vertex(String id) {
         this.id = id;
+        this.type = VertexType.END;
+    }
+
+    public void type(VertexType type) {
+        this.type = type;
+    }
+
+    public VertexType type() {
+        return type;
     }
 
     @Override
@@ -27,5 +37,4 @@ public class Vertex {
     public String toString() {
         return id;
     }
-
 }
