@@ -20,6 +20,8 @@ public class VertexAttributeProvider implements ComponentAttributeProvider<Verte
 
     private String vertexColor(Vertex vertex) {
         switch (vertex.type()) {
+            case START:
+                return "#1A5998";
             case FORK:
             case JOIN:
                 return "#004080";
@@ -30,6 +32,8 @@ public class VertexAttributeProvider implements ComponentAttributeProvider<Verte
 
     private String vertexFontColor(Vertex vertex) {
         switch (vertex.type()) {
+            case START:
+                return "#1A5998";
             case FORK:
             case JOIN:
                 return "#FFFFFF";
@@ -40,6 +44,8 @@ public class VertexAttributeProvider implements ComponentAttributeProvider<Verte
 
     private String vertexFillColor(Vertex vertex) {
         switch (vertex.type()) {
+            case START:
+                return "#68A3DF";
             case FORK:
             case JOIN:
                 return "#BF1E1B";

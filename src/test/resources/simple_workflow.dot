@@ -1,5 +1,5 @@
 digraph G {
-  myworkflow [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
+  myworkflow [ fillcolor="#68A3DF" shape="box" color="#1A5998" fontcolor="#1A5998" style="rounded,filled" ];
   action1 [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   decision1 [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   action2 [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
