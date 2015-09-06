@@ -66,7 +66,7 @@ class GraphGenerator {
     private String parseStartNode() throws Exception {
         String workflow = workflowNameValue();
         String next = startNodeToValue();
-        addVerticesAndEdge(workflow, VertexType.START, next);
+        addVerticesAndEdge(workflow, VertexType.START, next, "", EdgeType.DEFAULT);
         return next;
     }
 
@@ -115,7 +115,7 @@ class GraphGenerator {
                 String nextNode = forkPathStartValue(node, i);
 
                 if (!nextNode.isEmpty()) {
-                    addVerticesAndEdge(node, VertexType.FORK, nextNode);
+                    addVerticesAndEdge(node, VertexType.FORK, nextNode, "", EdgeType.DEFAULT);
                     parseNextNode(nextNode);
                 }
             }
@@ -130,7 +130,7 @@ class GraphGenerator {
         String next = joinNodeToValue(node);
 
         if (!next.isEmpty()) {
-            addVerticesAndEdge(node, VertexType.JOIN, next);
+            addVerticesAndEdge(node, VertexType.JOIN, next, "", EdgeType.DEFAULT);
             parseNextNode(next);
             return true;
         } else {
@@ -142,12 +142,12 @@ class GraphGenerator {
         String next = actionOkNodeToValue(node);
 
         if (!next.isEmpty()) {
-            addVerticesAndEdge(node, VertexType.ACTION, next);
+            addVerticesAndEdge(node, VertexType.ACTION, next, "", EdgeType.DEFAULT);
             parseNextNode(next);
 
             next = actionErrorNodeToValue(node);
             if (!next.isEmpty()) {
-                addVerticesAndEdge(node, VertexType.ACTION, next);
+                addVerticesAndEdge(node, VertexType.ACTION, next, "", EdgeType.ERROR);
                 parseNextNode(next);
             }
 
@@ -166,7 +166,7 @@ class GraphGenerator {
 
                 if (!nextNode.isEmpty()) {
                     String txt = decisionSwitchCaseText(node, i);
-                    addVerticesAndEdge(node, VertexType.DECISION, nextNode, txt.trim());
+                    addVerticesAndEdge(node, VertexType.DECISION, nextNode, txt.trim(), EdgeType.DEFAULT);
                     parseNextNode(nextNode);
                 }
             }
@@ -174,7 +174,7 @@ class GraphGenerator {
             String nextNode = decisionSwitchDefaultToValue(node);
 
             if (!nextNode.isEmpty()) {
-                addVerticesAndEdge(node, VertexType.DECISION, nextNode, DEFAULT);
+                addVerticesAndEdge(node, VertexType.DECISION, nextNode, DEFAULT, EdgeType.DEFAULT);
                 parseNextNode(nextNode);
             }
 
@@ -284,15 +284,11 @@ class GraphGenerator {
         return xPathFactory.newXPath().compile("/" + WORKFLOW_APP + "/" + node);
     }
 
-    private void addVerticesAndEdge(String node1, VertexType type1, String node2) {
-        addVerticesAndEdge(node1, type1, node2, "");
-    }
-
-    private void addVerticesAndEdge(String node1, VertexType type1, String node2, String edgeLabel) {
-        Vertex v1 = addVertex(node1, type1);
+    private void addVerticesAndEdge(String node1, VertexType vertexType1, String node2, String edgeLabel, EdgeType edgeType) {
+        Vertex v1 = addVertex(node1, vertexType1);
         Vertex v2 = addVertex(node2, VertexType.END);
 
-        addEdge(v1, v2, edgeLabel);
+        addEdge(v1, v2, edgeLabel, edgeType);
     }
 
     private Vertex addVertex(String node, VertexType type) {
@@ -305,8 +301,8 @@ class GraphGenerator {
         return v;
     }
 
-    private void addEdge(Vertex v1, Vertex v2, String edgeLabel) {
-        Edge edge = new Edge(v1, v2, edgeLabel);
+    private void addEdge(Vertex v1, Vertex v2, String edgeLabel, EdgeType type) {
+        Edge edge = new Edge(v1, v2, edgeLabel, type);
         edges.add(edge);
     }
 

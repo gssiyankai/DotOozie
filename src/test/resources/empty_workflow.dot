@@ -1,5 +1,5 @@
 digraph G {
   1 [ label="my-workflow" fillcolor="#68A3DF" shape="box" color="#1A5998" fontcolor="#1A5998" style="rounded,filled" ];
   2 [ label="success" fillcolor="#68A3DF" shape="box" color="#1A5998" fontcolor="#1A5998" style="rounded,filled" ];
-  1 -> 2 [ label="" fontsize="7.0" arrowsize="0.5" ];
+  1 -> 2 [ label="" fontsize="7.0" style="solid" arrowsize="0.5" ];
 }

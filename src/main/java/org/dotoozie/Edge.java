@@ -7,11 +7,13 @@ class Edge {
     private final Vertex src;
     private final Vertex dst;
     private final String label;
+    private final EdgeType type;
 
-    Edge(Vertex src, Vertex dst, String label) {
+    Edge(Vertex src, Vertex dst, String label, EdgeType type) {
         this.src = src;
         this.dst = dst;
         this.label = label;
+        this.type = type;
     }
 
     Vertex src() {
@@ -22,8 +24,8 @@ class Edge {
         return dst;
     }
 
-    String label() {
-        return label;
+    EdgeType type() {
+        return type;
     }
 
     @Override

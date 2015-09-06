@@ -12,7 +12,17 @@ class EdgeAttributeProvider implements ComponentAttributeProvider<Edge> {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("arrowsize", "0.5");
         attributes.put("fontsize", "7.0");
+        attributes.put("style", edgeStyle(edge));
         return attributes;
+    }
+
+    private String edgeStyle(Edge edge) {
+        switch (edge.type()) {
+            case ERROR:
+                return "dotted";
+            default:
+                return "solid";
+        }
     }
 
 }
