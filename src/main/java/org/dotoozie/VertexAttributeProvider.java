@@ -25,7 +25,7 @@ public class VertexAttributeProvider implements ComponentAttributeProvider<Verte
                 return "#1A5998";
             case FORK:
             case JOIN:
-                return "#004080";
+                return "#355F34";
             case KILL:
                 return "#004080";
             default:
@@ -40,7 +40,7 @@ public class VertexAttributeProvider implements ComponentAttributeProvider<Verte
                 return "#1A5998";
             case FORK:
             case JOIN:
-                return "#FFFFFF";
+                return "#355F34";
             case KILL:
                 return "#FFFFFF";
             default:
@@ -55,7 +55,7 @@ public class VertexAttributeProvider implements ComponentAttributeProvider<Verte
                 return "#68A3DF";
             case FORK:
             case JOIN:
-                return "#BF1E1B";
+                return "#94CF97";
             case KILL:
                 return "#BF1E1B";
             default:
