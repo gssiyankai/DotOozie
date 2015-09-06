@@ -1,11 +1,11 @@
 digraph G {
-  start [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
+  myworkflow [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   action1 [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   decision1 [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   action2 [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   success [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   fail [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
-  start -> action1 [ arrowsize="0.5" ];
+  myworkflow -> action1 [ arrowsize="0.5" ];
   action1 -> decision1 [ arrowsize="0.5" ];
   action1 -> fail [ arrowsize="0.5" ];
   decision1 -> action2 [ arrowsize="0.5" ];

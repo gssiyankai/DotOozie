@@ -63,8 +63,9 @@ class GraphGenerator {
     }
 
     private String parseStartNode() throws Exception {
+        String workflow = workflowNameValue();
         String next = startNodeToValue();
-        addVerticesAndEdge(START, VertexType.START, next);
+        addVerticesAndEdge(workflow, VertexType.START, next);
         return next;
     }
 
@@ -182,6 +183,10 @@ class GraphGenerator {
         } else {
             return false;
         }
+    }
+
+    private String workflowNameValue() throws Exception {
+        return nodeNameValue("");
     }
 
     private String startNodeToValue() throws Exception {

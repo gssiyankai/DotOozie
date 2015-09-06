@@ -1,12 +1,12 @@
 digraph G {
-  start [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
+  myworkflow [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   forking [ fillcolor="#BF1E1B" shape="box" color="#004080" fontcolor="#FFFFFF" style="rounded,filled" ];
   firstparalleljob [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   joining [ fillcolor="#BF1E1B" shape="box" color="#004080" fontcolor="#FFFFFF" style="rounded,filled" ];
   success [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   fail [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   secondparalleljob [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
-  start -> forking [ arrowsize="0.5" ];
+  myworkflow -> forking [ arrowsize="0.5" ];
   forking -> firstparalleljob [ arrowsize="0.5" ];
   forking -> secondparalleljob [ arrowsize="0.5" ];
   firstparalleljob -> joining [ arrowsize="0.5" ];
