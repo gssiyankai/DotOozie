@@ -3,6 +3,7 @@ package org.dotoozie;
 import org.jgraph.graph.DefaultEdge;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.ext.DOTExporter;
+import org.jgrapht.ext.IntegerNameProvider;
 import org.jgrapht.ext.StringNameProvider;
 
 import java.io.FileInputStream;
@@ -21,8 +22,9 @@ public class DotOozie {
 
     public DotOozie exportTo(String outputFile) throws Exception {
         try (Writer writer = new FileWriter(outputFile)) {
-            DOTExporter exporter = new DOTExporter(new StringNameProvider<>(),
-                                                   null, null,
+            DOTExporter exporter = new DOTExporter(new IntegerNameProvider(),
+                                                   new StringNameProvider<>(),
+                                                   null,
                                                    new VertexAttributeProvider(),
                                                    new EdgeAttributeProvider());
             exporter.export(writer, graph);

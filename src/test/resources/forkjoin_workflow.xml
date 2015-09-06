@@ -1,4 +1,4 @@
-<workflow-app xmlns='uri:oozie:workflow:0.1' name='myworkflow'>
+<workflow-app xmlns='uri:oozie:workflow:0.1' name='my-workflow'>
 
     <start to="forking"/>
 

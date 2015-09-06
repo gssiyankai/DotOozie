@@ -1,9 +1,9 @@
 digraph G {
-  myworkflow [ fillcolor="#68A3DF" shape="box" color="#1A5998" fontcolor="#1A5998" style="rounded,filled" ];
-  decision1 [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
-  success [ fillcolor="#68A3DF" shape="box" color="#1A5998" fontcolor="#1A5998" style="rounded,filled" ];
-  fail [ fillcolor="#BF1E1B" shape="box" color="#004080" fontcolor="#FFFFFF" style="rounded,filled" ];
-  myworkflow -> decision1 [ arrowsize="0.5" ];
-  decision1 -> success [ arrowsize="0.5" ];
-  decision1 -> fail [ arrowsize="0.5" ];
+  1 [ label="myworkflow" fillcolor="#68A3DF" shape="box" color="#1A5998" fontcolor="#1A5998" style="rounded,filled" ];
+  2 [ label="decision1" fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
+  3 [ label="success" fillcolor="#68A3DF" shape="box" color="#1A5998" fontcolor="#1A5998" style="rounded,filled" ];
+  4 [ label="fail" fillcolor="#BF1E1B" shape="box" color="#004080" fontcolor="#FFFFFF" style="rounded,filled" ];
+  1 -> 2 [ arrowsize="0.5" ];
+  2 -> 3 [ arrowsize="0.5" ];
+  2 -> 4 [ arrowsize="0.5" ];
 }
