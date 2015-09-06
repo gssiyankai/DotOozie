@@ -10,12 +10,21 @@ class VertexAttributeProvider implements ComponentAttributeProvider<Vertex> {
     @Override
     public Map<String, String> getComponentAttributes(Vertex vertex) {
         Map<String, String> attributes = new HashMap<>();
-        attributes.put("shape", "box");
+        attributes.put("shape", vertexShape(vertex));
         attributes.put("style", "rounded,filled");
         attributes.put("fillcolor", vertexFillColor(vertex));
         attributes.put("fontcolor", vertexFontColor(vertex));
         attributes.put("color", vertexColor(vertex));
         return attributes;
+    }
+
+    private String vertexShape(Vertex vertex) {
+        switch (vertex.type()) {
+            case DECISION:
+                return "diamond";
+            default:
+                return "box";
+        }
     }
 
     private String vertexColor(Vertex vertex) {

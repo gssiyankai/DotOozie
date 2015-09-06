@@ -1,7 +1,7 @@
 digraph G {
   1 [ label="my-workflow" fillcolor="#68A3DF" shape="box" color="#1A5998" fontcolor="#1A5998" style="rounded,filled" ];
   2 [ label="action1" fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
-  3 [ label="decision1" fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
+  3 [ label="decision1" fillcolor="#D3DFFF" shape="diamond" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   4 [ label="action2" fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   5 [ label="success" fillcolor="#68A3DF" shape="box" color="#1A5998" fontcolor="#1A5998" style="rounded,filled" ];
   6 [ label="fail" fillcolor="#BF1E1B" shape="box" color="#004080" fontcolor="#FFFFFF" style="rounded,filled" ];
