@@ -5,7 +5,7 @@ import org.jgrapht.ext.ComponentAttributeProvider;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VertexAttributeProvider implements ComponentAttributeProvider<Vertex> {
+class VertexAttributeProvider implements ComponentAttributeProvider<Vertex> {
 
     @Override
     public Map<String, String> getComponentAttributes(Vertex vertex) {

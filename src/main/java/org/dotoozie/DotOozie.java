@@ -1,9 +1,9 @@
 package org.dotoozie;
 
-import org.jgraph.graph.DefaultEdge;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.ext.DOTExporter;
 import org.jgrapht.ext.IntegerNameProvider;
+import org.jgrapht.ext.StringEdgeNameProvider;
 import org.jgrapht.ext.StringNameProvider;
 
 import java.io.FileInputStream;
@@ -13,7 +13,7 @@ import java.io.Writer;
 
 public class DotOozie {
 
-    private DirectedGraph<Vertex, DefaultEdge> graph;
+    private DirectedGraph<Vertex, Edge> graph;
 
     public DotOozie from(InputStream workflow) throws Exception {
         graph = new GraphGenerator().constructGraph(workflow);
@@ -22,18 +22,18 @@ public class DotOozie {
 
     public DotOozie exportTo(String outputFile) throws Exception {
         try (Writer writer = new FileWriter(outputFile)) {
-            DOTExporter exporter = new DOTExporter(new IntegerNameProvider(),
-                                                   new StringNameProvider<>(),
-                                                   null,
-                                                   new VertexAttributeProvider(),
-                                                   new EdgeAttributeProvider());
+            DOTExporter<Vertex, Edge> exporter = new DOTExporter<>(new IntegerNameProvider<>(),
+                                                                   new StringNameProvider<>(),
+                                                                   new StringEdgeNameProvider<>(),
+                                                                   new VertexAttributeProvider(),
+                                                                   new EdgeAttributeProvider());
             exporter.export(writer, graph);
         }
         return this;
     }
 
 
-    public static final void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         if (args.length < 2) {
             System.err.println("Expected arguments: <Oozie workflow xml> <dot output file>");
         }

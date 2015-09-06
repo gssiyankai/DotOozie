@@ -1,6 +1,6 @@
 package org.dotoozie;
 
-public enum VertexType {
+enum VertexType {
 
     START,
     FORK,

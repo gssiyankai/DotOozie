@@ -6,12 +6,12 @@ digraph G {
   5 [ label="success" fillcolor="#68A3DF" shape="box" color="#1A5998" fontcolor="#1A5998" style="rounded,filled" ];
   6 [ label="fail" fillcolor="#BF1E1B" shape="box" color="#004080" fontcolor="#FFFFFF" style="rounded,filled" ];
   7 [ label="secondparalleljob" fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
-  1 -> 2 [ arrowsize="0.5" ];
-  2 -> 3 [ arrowsize="0.5" ];
-  2 -> 7 [ arrowsize="0.5" ];
-  3 -> 4 [ arrowsize="0.5" ];
-  3 -> 6 [ arrowsize="0.5" ];
-  4 -> 5 [ arrowsize="0.5" ];
-  7 -> 4 [ arrowsize="0.5" ];
-  7 -> 6 [ arrowsize="0.5" ];
+  1 -> 2 [ label="" fontsize="7.0" arrowsize="0.5" ];
+  2 -> 3 [ label="" fontsize="7.0" arrowsize="0.5" ];
+  3 -> 4 [ label="" fontsize="7.0" arrowsize="0.5" ];
+  4 -> 5 [ label="" fontsize="7.0" arrowsize="0.5" ];
+  3 -> 6 [ label="" fontsize="7.0" arrowsize="0.5" ];
+  2 -> 7 [ label="" fontsize="7.0" arrowsize="0.5" ];
+  7 -> 4 [ label="" fontsize="7.0" arrowsize="0.5" ];
+  7 -> 6 [ label="" fontsize="7.0" arrowsize="0.5" ];
 }

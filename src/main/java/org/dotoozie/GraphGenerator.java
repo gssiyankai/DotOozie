@@ -1,6 +1,5 @@
 package org.dotoozie;
 
-import org.jgraph.graph.DefaultEdge;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.w3c.dom.Document;
@@ -11,7 +10,10 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 class GraphGenerator {
 
@@ -32,26 +34,25 @@ class GraphGenerator {
     static final String SWITCH = "switch";
     static final String CASE = "case";
     static final String DEFAULT = "default";
+    static final String TEXT = "text()";
 
     private final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
     private final XPathFactory xPathFactory = XPathFactory.newInstance();
     private final Map<String, Vertex> vertices = new LinkedHashMap<>();
-    private final Map<Vertex, List<Vertex>> edges = new LinkedHashMap<>();
+    private final List<Edge> edges = new ArrayList<>();
     private Document doc;
 
-    public DirectedGraph<Vertex, DefaultEdge> constructGraph(InputStream workflow) throws Exception {
+    DirectedGraph<Vertex, Edge> constructGraph(InputStream workflow) throws Exception {
         doc = documentBuilderFactory.newDocumentBuilder().parse(workflow);
 
         parseNodes();
 
-        DirectedGraph<Vertex, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
+        DirectedGraph<Vertex, Edge> graph = new DefaultDirectedGraph<>(Edge.class);
         for (Vertex vertex : vertices.values()) {
             graph.addVertex(vertex);
         }
-        for (Map.Entry<Vertex, List<Vertex>> edge : edges.entrySet()) {
-            for (Vertex vertex : edge.getValue()) {
-                graph.addEdge(edge.getKey(), vertex);
-            }
+        for (Edge edge : edges) {
+            graph.addEdge(edge.src(), edge.dst(), edge);
         }
         return graph;
     }
@@ -103,11 +104,7 @@ class GraphGenerator {
 
     private boolean addEndNode(String node) throws Exception {
         String name = nodeEndName();
-        if (!name.isEmpty() && name.equals(node)) {
-            return true;
-        } else {
-            return false;
-        }
+        return !name.isEmpty() && name.equals(node);
     }
 
     private boolean addForkNode(String node) throws Exception {
@@ -168,7 +165,8 @@ class GraphGenerator {
                 String nextNode = decisionSwitchCaseToValue(node, i);
 
                 if (!nextNode.isEmpty()) {
-                    addVerticesAndEdge(node, VertexType.DECISION, nextNode);
+                    String txt = decisionSwitchCaseText(node, i);
+                    addVerticesAndEdge(node, VertexType.DECISION, nextNode, txt.trim());
                     parseNextNode(nextNode);
                 }
             }
@@ -176,7 +174,7 @@ class GraphGenerator {
             String nextNode = decisionSwitchDefaultToValue(node);
 
             if (!nextNode.isEmpty()) {
-                addVerticesAndEdge(node, VertexType.DECISION, nextNode);
+                addVerticesAndEdge(node, VertexType.DECISION, nextNode, DEFAULT);
                 parseNextNode(nextNode);
             }
 
@@ -210,24 +208,28 @@ class GraphGenerator {
         return nodeToValue(nodeXPath(ACTION, node) + "/" + ERROR);
     }
 
+    private String decisionSwitchCaseToValue(String node, int i) throws Exception {
+        return nodeToValue(decisionSwitchCaseNodeXPath(node, i));
+    }
+
+    private String decisionSwitchCaseText(String node, int i) throws Exception {
+        return nodeText(decisionSwitchCaseNodeXPath(node, i));
+    }
+
+    private String decisionSwitchCaseNodeXPath(String node, int i) {
+        return decisionSwitchNodeXPath(node) + "/" + CASE + "[" + i + "]";
+    }
+
+    private String decisionSwitchDefaultToValue(String node) throws Exception {
+        return nodeToValue(decisionSwitchNodeXPath(node) + "/" + DEFAULT);
+    }
+
     private String nodeToValue(String node) throws Exception {
         return nodeToXPathExpression(node).evaluate(doc);
     }
 
     private String nodeEndName() throws Exception {
         return nodeNameValue(END);
-    }
-
-    private String nodeNameValue(String node) throws Exception {
-        return nodeNameXPathExpression(node).evaluate(doc);
-    }
-
-    private String decisionSwitchCaseToValue(String node, int i) throws Exception {
-        return nodeToValue(decisionSwitchNodeXPath(node) + "/" + CASE + "[" + i + "]");
-    }
-
-    private String decisionSwitchDefaultToValue(String node) throws Exception {
-        return nodeToValue(decisionSwitchNodeXPath(node) + "/" + DEFAULT);
     }
 
     private Node forkNode(String node) throws Exception {
@@ -244,6 +246,14 @@ class GraphGenerator {
 
     private String decisionSwitchNodeXPath(String node) {
         return nodeXPath(DECISION, node) + "/" + SWITCH;
+    }
+
+    private String nodeNameValue(String node) throws Exception {
+        return nodeNameXPathExpression(node).evaluate(doc);
+    }
+
+    private String nodeText(String node) throws Exception {
+        return nodeXPathExpression(node + "/" + TEXT).evaluate(doc);
     }
 
     private Node node(String node, String name) throws Exception {
@@ -275,15 +285,14 @@ class GraphGenerator {
     }
 
     private void addVerticesAndEdge(String node1, VertexType type1, String node2) {
+        addVerticesAndEdge(node1, type1, node2, "");
+    }
+
+    private void addVerticesAndEdge(String node1, VertexType type1, String node2, String edgeLabel) {
         Vertex v1 = addVertex(node1, type1);
         Vertex v2 = addVertex(node2, VertexType.END);
 
-        List<Vertex> connectedVertices = edges.get(v1);
-        if (connectedVertices == null) {
-            connectedVertices = new ArrayList<>();
-            edges.put(v1, connectedVertices);
-        }
-        connectedVertices.add(v2);
+        addEdge(v1, v2, edgeLabel);
     }
 
     private Vertex addVertex(String node, VertexType type) {
@@ -294,6 +303,11 @@ class GraphGenerator {
         }
         v.type(type);
         return v;
+    }
+
+    private void addEdge(Vertex v1, Vertex v2, String edgeLabel) {
+        Edge edge = new Edge(v1, v2, edgeLabel);
+        edges.add(edge);
     }
 
 }

@@ -7,15 +7,15 @@ class Vertex {
     private final String id;
     private VertexType type;
 
-    public Vertex(String id) {
+    Vertex(String id) {
         this.id = id;
     }
 
-    public void type(VertexType type) {
+    void type(VertexType type) {
         this.type = type;
     }
 
-    public VertexType type() {
+    VertexType type() {
         return type;
     }
 
@@ -36,4 +36,5 @@ class Vertex {
     public String toString() {
         return id;
     }
+
 }
