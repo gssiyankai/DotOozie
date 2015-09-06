@@ -94,6 +94,7 @@ class GraphGenerator {
     private boolean addKillNode(String node) throws Exception {
         Node kill = killNode(node);
         if (kill != null) {
+            Vertex v = addVertex(node, VertexType.KILL);
             return true;
         } else {
             return false;
@@ -274,17 +275,8 @@ class GraphGenerator {
     }
 
     private void addVerticesAndEdge(String node1, VertexType type1, String node2) {
-        Vertex v1 = vertices.get(node1);
-        if (v1 == null) {
-            v1 = new Vertex(node1);
-            vertices.put(node1, v1);
-        }
-        v1.type(type1);
-        Vertex v2 = vertices.get(node2);
-        if (v2 == null) {
-            v2 = new Vertex(node2);
-            vertices.put(node2, v2);
-        }
+        Vertex v1 = addVertex(node1, type1);
+        Vertex v2 = addVertex(node2, VertexType.END);
 
         List<Vertex> connectedVertices = edges.get(v1);
         if (connectedVertices == null) {
@@ -292,6 +284,16 @@ class GraphGenerator {
             edges.put(v1, connectedVertices);
         }
         connectedVertices.add(v2);
+    }
+
+    private Vertex addVertex(String node, VertexType type) {
+        Vertex v = vertices.get(node);
+        if (v == null) {
+            v = new Vertex(node);
+            vertices.put(node, v);
+        }
+        v.type(type);
+        return v;
     }
 
 }

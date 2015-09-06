@@ -4,7 +4,7 @@ digraph G {
   firstparalleljob [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   joining [ fillcolor="#BF1E1B" shape="box" color="#004080" fontcolor="#FFFFFF" style="rounded,filled" ];
   success [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
-  fail [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
+  fail [ fillcolor="#BF1E1B" shape="box" color="#004080" fontcolor="#FFFFFF" style="rounded,filled" ];
   secondparalleljob [ fillcolor="#D3DFFF" shape="box" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
   myworkflow -> forking [ arrowsize="0.5" ];
   forking -> firstparalleljob [ arrowsize="0.5" ];

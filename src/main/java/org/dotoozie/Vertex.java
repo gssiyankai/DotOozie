@@ -9,7 +9,6 @@ class Vertex {
 
     public Vertex(String id) {
         this.id = id;
-        this.type = VertexType.END;
     }
 
     public void type(VertexType type) {
