@@ -1,8 +1,8 @@
 digraph G {
-  1 [ label="myworkflow" fillcolor="#68A3DF" shape="box" color="#1A5998" fontcolor="#1A5998" style="rounded,filled" ];
-  2 [ label="decision1" fillcolor="#D3DFFF" shape="diamond" color="#1A5490" fontcolor="#1A5490" style="rounded,filled" ];
-  3 [ label="success" fillcolor="#68A3DF" shape="box" color="#1A5998" fontcolor="#1A5998" style="rounded,filled" ];
-  4 [ label="fail" fillcolor="#BF1E1B" shape="box" color="#004080" fontcolor="#FFFFFF" style="rounded,filled" ];
+  1 [ label="myworkflow" fillcolor="#68A3DF" color="#1A5998" shape="box" fontcolor="#1A5998" style="rounded,filled" ];
+  2 [ label="decision1" fillcolor="#D3DFFF" color="#1A5490" shape="diamond" fontcolor="#1A5490" style="rounded,filled" ];
+  3 [ label="success" fillcolor="#68A3DF" color="#1A5998" shape="box" fontcolor="#1A5998" style="rounded,filled" ];
+  4 [ label="fail" fillcolor="#BF1E1B" color="#004080" shape="box" fontcolor="#FFFFFF" style="rounded,filled" ];
   1 -> 2 [ label="" fontsize="7.0" style="solid" arrowsize="0.5" ];
   2 -> 3 [ label="${success} == 0" fontsize="7.0" style="solid" arrowsize="0.5" ];
   2 -> 4 [ label="default" fontsize="7.0" style="solid" arrowsize="0.5" ];

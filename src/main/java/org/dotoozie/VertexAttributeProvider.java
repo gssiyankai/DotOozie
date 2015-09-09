@@ -2,74 +2,25 @@ package org.dotoozie;
 
 import org.jgrapht.ext.ComponentAttributeProvider;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.Map;
 
-class VertexAttributeProvider implements ComponentAttributeProvider<Vertex> {
+class VertexAttributeProvider extends AttributeProvider implements ComponentAttributeProvider<Vertex> {
+
+    private static final String VERTEX =      "vertex";
+    private static final String COLOR =       "color";
+    private static final String FILLCOLOR =   "fillcolor";
+    private static final String FONTCOLOR =   "fontcolor";
+    private static final String SHAPE =       "shape";
+    private static final String STYLE =       "style";
+
+    VertexAttributeProvider() throws IOException {
+        super();
+    }
 
     @Override
     public Map<String, String> getComponentAttributes(Vertex vertex) {
-        Map<String, String> attributes = new HashMap<>();
-        attributes.put("shape", vertexShape(vertex));
-        attributes.put("style", "rounded,filled");
-        attributes.put("fillcolor", vertexFillColor(vertex));
-        attributes.put("fontcolor", vertexFontColor(vertex));
-        attributes.put("color", vertexColor(vertex));
-        return attributes;
-    }
-
-    private String vertexShape(Vertex vertex) {
-        switch (vertex.type()) {
-            case DECISION:
-                return "diamond";
-            default:
-                return "box";
-        }
-    }
-
-    private String vertexColor(Vertex vertex) {
-        switch (vertex.type()) {
-            case START:
-            case END:
-                return "#1A5998";
-            case FORK:
-            case JOIN:
-                return "#355F34";
-            case KILL:
-                return "#004080";
-            default:
-                return "#1A5490";
-        }
-    }
-
-    private String vertexFontColor(Vertex vertex) {
-        switch (vertex.type()) {
-            case START:
-            case END:
-                return "#1A5998";
-            case FORK:
-            case JOIN:
-                return "#355F34";
-            case KILL:
-                return "#FFFFFF";
-            default:
-                return "#1A5490";
-        }
-    }
-
-    private String vertexFillColor(Vertex vertex) {
-        switch (vertex.type()) {
-            case START:
-            case END:
-                return "#68A3DF";
-            case FORK:
-            case JOIN:
-                return "#94CF97";
-            case KILL:
-                return "#BF1E1B";
-            default:
-                return "#D3DFFF";
-        }
+        return attributes(VERTEX, vertex.type().name(), SHAPE, STYLE, FILLCOLOR, FONTCOLOR, COLOR);
     }
 
 }

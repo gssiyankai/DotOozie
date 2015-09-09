@@ -2,27 +2,23 @@ package org.dotoozie;
 
 import org.jgrapht.ext.ComponentAttributeProvider;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.Map;
 
-class EdgeAttributeProvider implements ComponentAttributeProvider<Edge> {
+class EdgeAttributeProvider extends AttributeProvider implements ComponentAttributeProvider<Edge> {
+
+    private static final String EDGE =        "edge";
+    private static final String ARROWSIZE =   "arrowsize";
+    private static final String FONTSIZE =    "fontsize";
+    private static final String STYLE =       "style";
+
+    EdgeAttributeProvider() throws IOException {
+        super();
+    }
 
     @Override
     public Map<String, String> getComponentAttributes(Edge edge) {
-        Map<String, String> attributes = new HashMap<>();
-        attributes.put("arrowsize", "0.5");
-        attributes.put("fontsize", "7.0");
-        attributes.put("style", edgeStyle(edge));
-        return attributes;
-    }
-
-    private String edgeStyle(Edge edge) {
-        switch (edge.type()) {
-            case ERROR:
-                return "dotted";
-            default:
-                return "solid";
-        }
+        return attributes(EDGE, edge.type().name(), ARROWSIZE, FONTSIZE, STYLE);
     }
 
 }
