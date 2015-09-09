@@ -6,14 +6,20 @@ public class Vertex {
 
     private final String id;
     private final VertexType type;
+    private final String subWfPath;
 
-    Vertex(String id, VertexType type) {
+    Vertex(String id, VertexType type, String subWfPath) {
         this.id = id;
         this.type = type;
+        this.subWfPath = subWfPath;
     }
 
     public VertexType type() {
         return type;
+    }
+
+    public String subWfPath() {
+        return subWfPath;
     }
 
     @Override

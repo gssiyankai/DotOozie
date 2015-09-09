@@ -28,6 +28,8 @@ public class GraphGenerator {
     static final String PATH = "path";
     static final String JOIN = "join";
     static final String ACTION = "action";
+    static final String SUB_WORKFLOW = "sub-workflow";
+    static final String APP_PATH = "app-path";
     static final String OK = "ok";
     static final String ERROR = "error";
     static final String DECISION = "decision";
@@ -159,7 +161,8 @@ public class GraphGenerator {
         Node action = actionNode(node);
 
         if (action != null) {
-            addVertex(node, VertexType.ACTION);
+            String subWfAppPath = actionSubWfAppPath(node);
+            addVertex(node, VertexType.ACTION, subWfAppPath);
 
             String next = actionOkNodeToValue(node);
             addEdge(node, next);
@@ -225,6 +228,10 @@ public class GraphGenerator {
 
     private String actionOkNodeToValue(String node) throws Exception {
         return nodeToValue(nodeXPath(ACTION, node) + "/" + OK);
+    }
+
+    private String actionSubWfAppPath(String node) throws Exception {
+        return nodeText(nodeXPath(ACTION, node) + "/" + SUB_WORKFLOW + "/" + APP_PATH);
     }
 
     private String actionErrorNodeToValue(String node) throws Exception {
@@ -316,7 +323,11 @@ public class GraphGenerator {
     }
 
     private void addVertex(String node, VertexType type) {
-        Vertex v = new Vertex(node, type);
+        addVertex(node, type, "");
+    }
+
+    private void addVertex(String node, VertexType type, String subWfPath) {
+        Vertex v = new Vertex(node, type, subWfPath);
         vertices.put(node, v);
     }
 
