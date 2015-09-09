@@ -7,6 +7,8 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import java.io.File;
 import java.util.Collection;
 
+import static org.dotoozie.Constants.WORKFLOW_XML;
+
 final class RecursiveDotOozie implements DotOozie {
 
     private File dot;
@@ -27,7 +29,7 @@ final class RecursiveDotOozie implements DotOozie {
     @Override
     public RecursiveDotOozie exportTo(String format) throws Exception {
         Collection<File> workflows = FileUtils.listFiles(workflow.getParentFile(),
-                                                         new NameFileFilter("workflow.xml"),
+                                                         new NameFileFilter(WORKFLOW_XML),
                                                          TrueFileFilter.INSTANCE);
         for (File workflow : workflows) {
             DotOozie dotOozie = new DefaultDotOozie();

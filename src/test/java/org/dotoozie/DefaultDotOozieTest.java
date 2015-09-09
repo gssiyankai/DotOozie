@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 
+import static org.dotoozie.Constants.*;
 import static org.junit.Assert.assertEquals;
 
 public class DefaultDotOozieTest {
@@ -45,13 +46,13 @@ public class DefaultDotOozieTest {
     }
 
     private void it_exports_workflow(String prefix) throws Exception {
-        File workflow = File.createTempFile("worflow", "xml");
-        File dot = File.createTempFile("worflow", "dot");
-        IOUtils.copy(getClass().getResourceAsStream("/" + prefix + "_workflow.xml"),
+        File workflow = File.createTempFile(WORKFLOW, XML);
+        File dot = File.createTempFile(WORKFLOW, DOT);
+        IOUtils.copy(getClass().getResourceAsStream("/" + prefix + "_" + WORKFLOW_XML),
                      new FileOutputStream(workflow));
         dotOozie.fromWorkflow(workflow)
                 .exportToDot(dot);
-        assertEquals(IOUtils.toString(getClass().getResourceAsStream("/" + prefix + "_workflow.dot")),
+        assertEquals(IOUtils.toString(getClass().getResourceAsStream("/" + prefix + "_" + WORKFLOW + "." + DOT)),
                      IOUtils.toString(new FileReader(dot.getAbsolutePath())));
     }
 

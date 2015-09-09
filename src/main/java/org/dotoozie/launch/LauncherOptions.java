@@ -1,16 +1,13 @@
 package org.dotoozie.launch;
 
-import org.apache.commons.lang.SystemUtils;
 import org.kohsuke.args4j.Option;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public final class LauncherOptions {
+import static org.dotoozie.Constants.*;
 
-    private static final String WORKFLOW_XML = "workflow.xml";
-    private static final String DOT = "dot";
-    private static final String DOT_EXTENSION = SystemUtils.IS_OS_WINDOWS ? ".exe" : "";
+public final class LauncherOptions {
 
     public File workflow;
     @Option(name = "-workflow", aliases = {"-w"}, usage = "To set the worflow.xml location", required = true)
@@ -20,7 +17,7 @@ public final class LauncherOptions {
             workflow = f;
         }
         if (!workflow.exists()) {
-            throw new FileNotFoundException(String.format("workflow.xnl not found at %s", workflow.getAbsolutePath()));
+            throw new FileNotFoundException(String.format("%s not found at %s", WORKFLOW_XML, workflow.getAbsolutePath()));
         }
         this.workflow = workflow;
     }
@@ -39,7 +36,7 @@ public final class LauncherOptions {
             }
         }
         if (!dot.exists()) {
-            throw new FileNotFoundException(String.format("dot executable not found at %s", dot.getAbsolutePath()));
+            throw new FileNotFoundException(String.format("%s executable not found at %s", DOT, dot.getAbsolutePath()));
         }
         this.dot = dot;
     }

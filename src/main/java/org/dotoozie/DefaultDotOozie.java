@@ -17,6 +17,9 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.Writer;
 
+import static org.dotoozie.Constants.DOT;
+import static org.dotoozie.Constants.WORKFLOW;
+
 final class DefaultDotOozie implements DotOozie {
 
     private File dot;
@@ -50,8 +53,8 @@ final class DefaultDotOozie implements DotOozie {
 
     @Override
     public DefaultDotOozie exportTo(String format) throws Exception {
-        File output = new File(workflow.getParent(), "workflow." + format);
-        File dotFile = File.createTempFile("workflow", "dot");
+        File output = new File(workflow.getParent(), WORKFLOW + "." + format);
+        File dotFile = File.createTempFile(WORKFLOW, DOT);
         exportToDot(dotFile);
         DotExecutable dotExecutable = new DotExecutable(dot);
         dotExecutable.withArguments("-T" + format,
