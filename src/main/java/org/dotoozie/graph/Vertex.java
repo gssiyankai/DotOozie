@@ -5,13 +5,10 @@ import java.util.Objects;
 public class Vertex {
 
     private final String id;
-    private VertexType type;
+    private final VertexType type;
 
-    Vertex(String id) {
+    Vertex(String id, VertexType type) {
         this.id = id;
-    }
-
-    void type(VertexType type) {
         this.type = type;
     }
 

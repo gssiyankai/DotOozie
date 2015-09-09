@@ -4,23 +4,23 @@ import java.util.Objects;
 
 public class Edge {
 
-    private final Vertex src;
-    private final Vertex dst;
+    private final String src;
+    private final String dst;
     private final String label;
     private final EdgeType type;
 
-    Edge(Vertex src, Vertex dst, String label, EdgeType type) {
+    Edge(String src, String dst, String label, EdgeType type) {
         this.src = src;
         this.dst = dst;
         this.label = label;
         this.type = type;
     }
 
-    Vertex src() {
+    String src() {
         return src;
     }
 
-    Vertex dst() {
+    String dst() {
         return dst;
     }
 
@@ -34,13 +34,12 @@ public class Edge {
         if (o == null || getClass() != o.getClass()) return false;
         Edge edge = (Edge) o;
         return Objects.equals(src, edge.src) &&
-                Objects.equals(dst, edge.dst) &&
-                Objects.equals(label, edge.label);
+                Objects.equals(dst, edge.dst);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(src, dst, label);
+        return Objects.hash(src, dst);
     }
 
     @Override
