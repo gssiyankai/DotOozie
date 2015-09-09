@@ -1,6 +1,6 @@
-package org.dotoozie;
+package org.dotoozie.graph;
 
-enum VertexType {
+public enum VertexType {
 
     START,
     FORK,

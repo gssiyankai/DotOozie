@@ -1,8 +1,8 @@
-package org.dotoozie;
+package org.dotoozie.graph;
 
 import java.util.Objects;
 
-class Vertex {
+public class Vertex {
 
     private final String id;
     private VertexType type;
@@ -15,7 +15,7 @@ class Vertex {
         this.type = type;
     }
 
-    VertexType type() {
+    public VertexType type() {
         return type;
     }
 

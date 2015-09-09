@@ -1,4 +1,4 @@
-package org.dotoozie;
+package org.dotoozie.graph;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
@@ -15,7 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-class GraphGenerator {
+public class GraphGenerator {
 
     static final String WORKFLOW_APP = "workflow-app";
     static final String START = "start";
@@ -42,7 +42,7 @@ class GraphGenerator {
     private final List<Edge> edges = new ArrayList<>();
     private Document doc;
 
-    DirectedGraph<Vertex, Edge> constructGraph(InputStream workflow) throws Exception {
+    public DirectedGraph<Vertex, Edge> constructGraph(InputStream workflow) throws Exception {
         doc = documentBuilderFactory.newDocumentBuilder().parse(workflow);
 
         parseNodes();

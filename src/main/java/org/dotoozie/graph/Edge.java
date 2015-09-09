@@ -1,8 +1,8 @@
-package org.dotoozie;
+package org.dotoozie.graph;
 
 import java.util.Objects;
 
-class Edge {
+public class Edge {
 
     private final Vertex src;
     private final Vertex dst;
@@ -24,7 +24,7 @@ class Edge {
         return dst;
     }
 
-    EdgeType type() {
+    public EdgeType type() {
         return type;
     }
 

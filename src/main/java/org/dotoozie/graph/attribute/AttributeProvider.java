@@ -1,4 +1,4 @@
-package org.dotoozie;
+package org.dotoozie.graph.attribute;
 
 import java.io.IOException;
 import java.util.Arrays;

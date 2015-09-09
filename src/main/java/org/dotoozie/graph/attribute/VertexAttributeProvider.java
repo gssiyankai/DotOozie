@@ -1,11 +1,12 @@
-package org.dotoozie;
+package org.dotoozie.graph.attribute;
 
+import org.dotoozie.graph.Vertex;
 import org.jgrapht.ext.ComponentAttributeProvider;
 
 import java.io.IOException;
 import java.util.Map;
 
-class VertexAttributeProvider extends AttributeProvider implements ComponentAttributeProvider<Vertex> {
+public final class VertexAttributeProvider extends AttributeProvider implements ComponentAttributeProvider<Vertex> {
 
     private static final String VERTEX =      "vertex";
     private static final String COLOR =       "color";
@@ -14,7 +15,7 @@ class VertexAttributeProvider extends AttributeProvider implements ComponentAttr
     private static final String SHAPE =       "shape";
     private static final String STYLE =       "style";
 
-    VertexAttributeProvider() throws IOException {
+    public VertexAttributeProvider() throws IOException {
         super();
     }
 
