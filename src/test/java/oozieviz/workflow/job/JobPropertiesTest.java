@@ -17,17 +17,17 @@ public class JobPropertiesTest {
     }
 
     @Test
-    public void it_leaves_text_without_token_unchanged() throws Exception {
+    public void it_leaves_text_without_token_unchanged() {
         assertThat(properties.replaceTokens("foo")).isEqualTo("foo");
     }
 
     @Test
-    public void it_replaces_unknown_tokens_with_whitespaces() throws Exception {
+    public void it_replaces_unknown_tokens_with_whitespaces() {
         assertThat(properties.replaceTokens("${foo}")).isEmpty();
     }
 
     @Test
-    public void it_replaces_tokens() throws Exception {
+    public void it_replaces_tokens() {
         assertThat(properties.replaceTokens("${sub_workflow_folder}")).isEqualTo("sub-wf");
     }
 

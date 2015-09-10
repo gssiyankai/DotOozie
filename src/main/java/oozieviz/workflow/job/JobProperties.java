@@ -29,7 +29,7 @@ public final class JobProperties {
         return new JobProperties(properties);
     }
 
-    public String replaceTokens(String text) throws Exception {
+    public String replaceTokens(String text) {
         Pattern pattern = Pattern.compile(TOKEN_REGEX);
         Matcher matcher = pattern.matcher(text);
         StringBuilder builder = new StringBuilder();
@@ -48,7 +48,7 @@ public final class JobProperties {
         return builder.toString();
     }
 
-    private String property(String key) throws Exception {
+    private String property(String key) {
         return properties.getProperty(key, "");
     }
 
