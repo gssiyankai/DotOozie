@@ -23,7 +23,7 @@ public final class Launcher {
 
         OozieViz oozieViz = new OozieViz();
         oozieViz.givenDot(options.dot)
-                .givenOptionalJobProperties(options.jobProperties)
+                .givenJobProperties(options.jobProperties)
                 .fromWorkflow(options.workflow)
                 .exportToSvg();
     }

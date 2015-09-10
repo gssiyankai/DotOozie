@@ -4,23 +4,16 @@ import oozieviz.utils.graphviz.DotExecutable;
 import oozieviz.workflow.Workflow;
 import oozieviz.workflow.graph.Edge;
 import oozieviz.workflow.graph.Vertex;
-import oozieviz.workflow.graph.attribute.EdgeAttributeProvider;
-import oozieviz.workflow.graph.attribute.VertexAttributeProvider;
+import oozieviz.workflow.graph.attribute.*;
 import oozieviz.workflow.job.JobProperties;
-import org.jgrapht.ext.DOTExporter;
-import org.jgrapht.ext.IntegerNameProvider;
-import org.jgrapht.ext.StringEdgeNameProvider;
-import org.jgrapht.ext.StringNameProvider;
+import org.jgrapht.ext.*;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
 import java.util.Optional;
 
-import static oozieviz.Constants.DOT;
-import static oozieviz.Constants.SVG;
-import static oozieviz.Constants.WORKFLOW;
+import static oozieviz.Constants.*;
 import static oozieviz.workflow.Workflow.newWorkFlow;
 import static oozieviz.workflow.job.JobProperties.newJobProperties;
 
@@ -35,7 +28,7 @@ public final class OozieViz {
         return this;
     }
 
-    public OozieViz givenOptionalJobProperties(Optional<File> props) throws Exception {
+    public OozieViz givenJobProperties(Optional<File> props) throws Exception {
         this.jobProperties = newJobProperties(props);
         return this;
     }
@@ -46,22 +39,22 @@ public final class OozieViz {
     }
 
     public OozieViz exportToDot() throws Exception {
-        return exportWorkflowToDot(workflow);
+        return exportWorkflowToDot(workflow, new DefaultVertexAttributeProvider());
     }
 
-    private OozieViz exportWorkflowToDot(Workflow workflow) throws IOException {
+    private OozieViz exportWorkflowToDot(Workflow workflow, VertexAttributeProvider vertexAttributeProvider) throws Exception {
         File dotFile = workflowOutputFile(workflow, DOT);
         try (Writer writer = new FileWriter(dotFile)) {
             DOTExporter<Vertex, Edge> exporter = new DOTExporter<>(new IntegerNameProvider<>(),
                                                                    new StringNameProvider<>(),
                                                                    new StringEdgeNameProvider<>(),
-                                                                   new VertexAttributeProvider(),
+                                                                   vertexAttributeProvider,
                                                                    new EdgeAttributeProvider());
             exporter.export(writer, workflow.graph());
         }
 
         for (Workflow subWf : workflow.subWfs()) {
-            exportWorkflowToDot(subWf);
+            exportWorkflowToDot(subWf, vertexAttributeProvider);
         }
 
         return this;
@@ -76,7 +69,10 @@ public final class OozieViz {
         File outputFile = workflowOutputFile(workflow, SVG);
         File dotFile = workflowOutputFile(workflow, DOT);
 
-        exportWorkflowToDot(workflow);
+        exportWorkflowToDot(workflow,
+                            new CompositeVertexAttributeProvider(
+                                    new DefaultVertexAttributeProvider(),
+                                    new UrlVertexAttributeProvider(workflow.path(), jobProperties)));
 
         dotExe.withArguments("-T" + SVG,
                              dotFile.getAbsolutePath(),

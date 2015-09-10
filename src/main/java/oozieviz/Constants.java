@@ -15,6 +15,7 @@ public final class Constants {
     public static final String WORKFLOW = "workflow";
     public static final String WORKFLOW_XML = WORKFLOW + ".xml";
     public static final String WORKFLOW_DOT = WORKFLOW + ".dot";
+    public static final String WORKFLOW_SVG = WORKFLOW + ".svg";
 
     public static final String JOB_PROPERTIES = "job.properties";
 
