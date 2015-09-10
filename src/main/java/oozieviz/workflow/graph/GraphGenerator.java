@@ -1,4 +1,4 @@
-package org.dotoozie.graph;
+package oozieviz.workflow.graph;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
@@ -6,14 +6,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.*;
+
+import static javax.xml.xpath.XPathConstants.NODE;
 
 public class GraphGenerator {
 
@@ -44,8 +43,9 @@ public class GraphGenerator {
     private final List<Edge> edges = new ArrayList<>();
     private Document doc;
 
-    public DirectedGraph<Vertex, Edge> constructGraph(InputStream workflow) throws Exception {
-        doc = documentBuilderFactory.newDocumentBuilder().parse(workflow);
+    public DirectedGraph<Vertex, Edge> constructGraph(File workflow) throws Exception {
+        doc = documentBuilderFactory.newDocumentBuilder()
+                                    .parse(new FileInputStream(workflow));
 
         parseNodes();
 
@@ -161,7 +161,11 @@ public class GraphGenerator {
         Node action = actionNode(node);
 
         if (action != null) {
-            String subWfAppPath = actionSubWfAppPath(node);
+            Optional<String> subWfAppPath = Optional.empty();
+            Node subWfAppPathNode = actionSubWfAppPathNode(node);
+            if (subWfAppPathNode != null) {
+                subWfAppPath = Optional.of(actionSubWfAppPathText(node));
+            }
             addVertex(node, VertexType.ACTION, subWfAppPath);
 
             String next = actionOkNodeToValue(node);
@@ -230,8 +234,16 @@ public class GraphGenerator {
         return nodeToValue(nodeXPath(ACTION, node) + "/" + OK);
     }
 
-    private String actionSubWfAppPath(String node) throws Exception {
-        return nodeText(nodeXPath(ACTION, node) + "/" + SUB_WORKFLOW + "/" + APP_PATH);
+    private String actionSubWfAppPathText(String node) throws Exception {
+        return nodeText(actionSubWfAppPathNodeXPath(node));
+    }
+
+    private Node actionSubWfAppPathNode(String node) throws Exception {
+        return (Node) nodeXPathExpression(actionSubWfAppPathNodeXPath(node)).evaluate(doc, NODE);
+    }
+
+    private String actionSubWfAppPathNodeXPath(String node) {
+        return nodeXPath(ACTION, node) + "/" + SUB_WORKFLOW + "/" + APP_PATH;
     }
 
     private String actionErrorNodeToValue(String node) throws Exception {
@@ -279,7 +291,7 @@ public class GraphGenerator {
     }
 
     private Node decisionSwitchNode(String node) throws Exception {
-        return (Node) nodeXPathExpression(decisionSwitchNodeXPath(node)).evaluate(doc, XPathConstants.NODE);
+        return (Node) nodeXPathExpression(decisionSwitchNodeXPath(node)).evaluate(doc, NODE);
     }
 
     private String decisionSwitchNodeXPath(String node) {
@@ -295,7 +307,7 @@ public class GraphGenerator {
     }
 
     private Node node(String node, String name) throws Exception {
-        return (Node) nodeXPathExpression(nodeXPath(node, name)).evaluate(doc, XPathConstants.NODE);
+        return (Node) nodeXPathExpression(nodeXPath(node, name)).evaluate(doc, NODE);
     }
 
     private String nodeXPath(String node, String name) {
@@ -323,10 +335,10 @@ public class GraphGenerator {
     }
 
     private void addVertex(String node, VertexType type) {
-        addVertex(node, type, "");
+        addVertex(node, type, Optional.empty());
     }
 
-    private void addVertex(String node, VertexType type, String subWfPath) {
+    private void addVertex(String node, VertexType type, Optional<String> subWfPath) {
         Vertex v = new Vertex(node, type, subWfPath);
         vertices.put(node, v);
     }

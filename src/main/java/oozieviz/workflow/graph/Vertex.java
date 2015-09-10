@@ -1,14 +1,15 @@
-package org.dotoozie.graph;
+package oozieviz.workflow.graph;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class Vertex {
 
     private final String id;
     private final VertexType type;
-    private final String subWfPath;
+    private final Optional<String> subWfPath;
 
-    Vertex(String id, VertexType type, String subWfPath) {
+    Vertex(String id, VertexType type, Optional<String> subWfPath) {
         this.id = id;
         this.type = type;
         this.subWfPath = subWfPath;
@@ -18,7 +19,7 @@ public class Vertex {
         return type;
     }
 
-    public String subWfPath() {
+    public Optional<String> subWfPath() {
         return subWfPath;
     }
 

@@ -1,3 +1,7 @@
-DotOozie
+Oozie Worflow Visualizer
 --------------------
-Exports an Oozie workflow into a dot file
+Exports Oozie workflow and sub-workflows to svg files using GraphViz.
+
+Requirements
+--------------------
+Needs GraphViz dot.

@@ -1,10 +1,8 @@
-package org.dotoozie.launch;
+package oozieviz.launch;
 
-import org.dotoozie.DotOozie;
+import oozieviz.OozieViz;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
-
-import static org.dotoozie.DotOozieFactory.newDotOozie;
 
 public final class Launcher {
 
@@ -12,7 +10,7 @@ public final class Launcher {
     }
 
     public static void main(String[] args) throws Exception {
-        LauncherOptions options = new LauncherOptions();
+        Options options = new Options();
 
         CmdLineParser parser = new CmdLineParser(options);
         try {
@@ -23,10 +21,11 @@ public final class Launcher {
             parser.printUsage(System.err);
         }
 
-        DotOozie dotOozie = newDotOozie(options.recursive);
-        dotOozie.givenDot(options.dot)
+        OozieViz oozieViz = new OozieViz();
+        oozieViz.givenDot(options.dot)
+                .givenOptionalJobProperties(options.jobProperties)
                 .fromWorkflow(options.workflow)
-                .exportTo(options.format);
+                .exportToSvg();
     }
 
 }

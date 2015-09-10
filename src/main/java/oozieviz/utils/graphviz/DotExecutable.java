@@ -1,11 +1,11 @@
-package org.dotoozie.dot;
+package oozieviz.utils.graphviz;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DotExecutable {
+public final class DotExecutable {
 
     private final File dot;
     private String[] args;
@@ -28,9 +28,9 @@ public class DotExecutable {
         Process p = pb.start();
         int exitValue = p.waitFor();
         if (exitValue != 0) {
-            throw new RuntimeException(String.format("Failed executing command: %s", String.join(" ", pb.command())));
+            throw new ExecutionException(String.format("Failed executing command: %s", String.join(" ", pb.command())));
         }
         return this;
-}
+    }
 
 }

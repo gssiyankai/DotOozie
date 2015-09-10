@@ -1,4 +1,4 @@
-package org.dotoozie.graph;
+package oozieviz.workflow.graph;
 
 public enum EdgeType {
 

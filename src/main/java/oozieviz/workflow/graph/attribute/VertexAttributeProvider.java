@@ -1,6 +1,6 @@
-package org.dotoozie.graph.attribute;
+package oozieviz.workflow.graph.attribute;
 
-import org.dotoozie.graph.Vertex;
+import oozieviz.workflow.graph.Vertex;
 import org.jgrapht.ext.ComponentAttributeProvider;
 
 import java.io.IOException;
