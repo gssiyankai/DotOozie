@@ -15,17 +15,19 @@ public final class Launcher {
         CmdLineParser parser = new CmdLineParser(options);
         try {
             parser.parseArgument(args);
+
+            OozieViz oozieViz = new OozieViz();
+            oozieViz.givenDot(options.dot)
+                    .givenJobProperties(options.jobProperties)
+                    .fromWorkflow(options.workflow)
+                    .exportToSvg();
+
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
             System.err.println("USAGE:");
             parser.printUsage(System.err);
         }
 
-        OozieViz oozieViz = new OozieViz();
-        oozieViz.givenDot(options.dot)
-                .givenJobProperties(options.jobProperties)
-                .fromWorkflow(options.workflow)
-                .exportToSvg();
     }
 
 }
