@@ -5,8 +5,11 @@ import oozieviz.workflow.Workflow;
 import oozieviz.workflow.graph.Edge;
 import oozieviz.workflow.graph.Vertex;
 import oozieviz.workflow.graph.attribute.*;
-import oozieviz.workflow.job.JobProperties;
-import org.jgrapht.ext.*;
+import oozieviz.workflow.job.PathResolver;
+import org.jgrapht.ext.DOTExporter;
+import org.jgrapht.ext.IntegerNameProvider;
+import org.jgrapht.ext.StringEdgeNameProvider;
+import org.jgrapht.ext.StringNameProvider;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -20,7 +23,7 @@ import static oozieviz.workflow.job.JobProperties.newJobProperties;
 public final class OozieViz {
 
     private DotExecutable dotExe;
-    private JobProperties jobProperties;
+    private PathResolver pathResolver;
     private Workflow workflow;
 
     public OozieViz givenDot(File dot) {
@@ -29,12 +32,12 @@ public final class OozieViz {
     }
 
     public OozieViz givenJobProperties(Optional<File> props) throws Exception {
-        this.jobProperties = newJobProperties(props);
+        this.pathResolver = new PathResolver(newJobProperties(props));
         return this;
     }
 
     public OozieViz fromWorkflow(File workflowXml) throws Exception {
-        this.workflow = newWorkFlow(workflowXml, jobProperties);
+        this.workflow = newWorkFlow(workflowXml, pathResolver);
         return this;
     }
 
@@ -72,7 +75,7 @@ public final class OozieViz {
         exportWorkflowToDot(workflow,
                             new CompositeVertexAttributeProvider(
                                     new DefaultVertexAttributeProvider(),
-                                    new UrlVertexAttributeProvider(workflow.path(), jobProperties)));
+                                    new UrlVertexAttributeProvider(workflow.path(), pathResolver)));
 
         dotExe.withArguments("-T" + SVG,
                              dotFile.getAbsolutePath(),

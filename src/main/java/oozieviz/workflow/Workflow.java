@@ -3,7 +3,7 @@ package oozieviz.workflow;
 import oozieviz.workflow.graph.Edge;
 import oozieviz.workflow.graph.GraphGenerator;
 import oozieviz.workflow.graph.Vertex;
-import oozieviz.workflow.job.JobProperties;
+import oozieviz.workflow.job.PathResolver;
 import org.jgrapht.DirectedGraph;
 
 import java.io.File;
@@ -37,16 +37,17 @@ public final class Workflow {
         return subWfs;
     }
 
-    public static Workflow newWorkFlow(File workflowXml, JobProperties jobProperties) throws Exception {
+    public static Workflow newWorkFlow(File workflowXml, PathResolver pathResolver) throws Exception {
         DirectedGraph<Vertex, Edge> graph = new GraphGenerator().constructGraph(workflowXml);
 
         Collection<Workflow> subWfs = new LinkedList<>();
         for (Vertex vertex : graph.vertexSet()) {
             Optional<String> subWfPath = vertex.subWfPath();
             if (subWfPath.isPresent()) {
-                String expandedSubWfPath = jobProperties.replaceTokens(subWfPath.get());
-                File subWfXml = new File(expandedSubWfPath, WORKFLOW_XML);
-                subWfs.add(newWorkFlow(subWfXml, jobProperties));
+                String resolvedSubWfPath = pathResolver.resolvePath(subWfPath.get());
+                File subWfXml = new File(resolvedSubWfPath, WORKFLOW_XML);
+                Workflow subWf = newWorkFlow(subWfXml, pathResolver);
+                subWfs.add(subWf);
             }
         }
 
