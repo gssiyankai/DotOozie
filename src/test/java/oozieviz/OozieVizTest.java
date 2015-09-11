@@ -8,12 +8,12 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 
 import static oozieviz.Constants.WORKFLOW_DOT;
 import static oozieviz.Constants.WORKFLOW_XML;
+import static oozieviz.utils.ResourceHelper.resourceFile;
 import static org.fest.assertions.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
@@ -45,17 +45,13 @@ public class OozieVizTest {
 
     @Test
     public void it_exports_workflow_to_dot() throws Exception {
-        File workflow = resourceFile(WORKFLOW_XML);
+        File workflow = resourceFile(usecase + "_" + WORKFLOW_XML);
         File dot = new File(workflow.getParent(), WORKFLOW_DOT);
 
         oozieViz.fromWorkflow(workflow)
                 .exportToDot();
 
-        assertThat(dot).hasSameContentAs(resourceFile(WORKFLOW_DOT));
-    }
-
-    private File resourceFile(String name) throws Exception {
-        return Paths.get(getClass().getResource("/" + usecase + "_" + name).toURI()).toFile();
+        assertThat(dot).hasSameContentAs(resourceFile(usecase + "_" + WORKFLOW_DOT));
     }
 
 }

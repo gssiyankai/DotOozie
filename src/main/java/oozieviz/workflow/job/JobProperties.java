@@ -17,15 +17,10 @@ public final class JobProperties {
     }
 
     public static JobProperties newJobProperties(Optional<File> f) throws Exception {
-        if (f.isPresent()) {
-            return newJobProperties(new FileInputStream(f.get()));
-        }
-        return new JobProperties(new Properties());
-    }
-
-    public static JobProperties newJobProperties(InputStream s) throws Exception {
         Properties properties = new Properties();
-        properties.load(s);
+        if (f.isPresent()) {
+            properties.load(new FileInputStream(f.get()));
+        }
         return new JobProperties(properties);
     }
 

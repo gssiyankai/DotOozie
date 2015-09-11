@@ -3,7 +3,10 @@ package oozieviz.workflow.job;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static oozieviz.Constants.JOB_PROPERTIES;
+import static oozieviz.utils.ResourceHelper.resourceFile;
 import static oozieviz.workflow.job.JobProperties.newJobProperties;
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -13,7 +16,7 @@ public class JobPropertiesTest {
 
     @Before
     public void setup() throws Exception {
-        properties = newJobProperties(getClass().getResourceAsStream("/" + JOB_PROPERTIES));
+        properties = newJobProperties(Optional.of(resourceFile(JOB_PROPERTIES)));
     }
 
     @Test
