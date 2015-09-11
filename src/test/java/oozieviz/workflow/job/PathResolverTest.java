@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.Optional;
 
 import static oozieviz.Constants.JOB_PROPERTIES;
-import static oozieviz.utils.ResourceHelper.resourceFile;
+import static oozieviz.ResourceHelper.resourceFile;
 import static oozieviz.workflow.job.JobProperties.newJobProperties;
 import static org.fest.assertions.Assertions.assertThat;
 

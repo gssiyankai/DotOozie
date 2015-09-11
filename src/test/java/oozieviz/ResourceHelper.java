@@ -1,4 +1,4 @@
-package oozieviz.utils;
+package oozieviz;
 
 import java.io.File;
 import java.nio.file.Paths;

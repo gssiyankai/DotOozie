@@ -13,7 +13,7 @@ import java.util.Collection;
 
 import static oozieviz.Constants.WORKFLOW_DOT;
 import static oozieviz.Constants.WORKFLOW_XML;
-import static oozieviz.utils.ResourceHelper.resourceFile;
+import static oozieviz.ResourceHelper.resourceFile;
 import static org.fest.assertions.Assertions.assertThat;
 
 @RunWith(Parameterized.class)

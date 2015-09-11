@@ -1,4 +1,4 @@
-package oozieviz.utils.graphviz;
+package oozieviz.utils;
 
 final class ExecutionException extends Exception {
 

@@ -1,6 +1,6 @@
 package oozieviz;
 
-import oozieviz.utils.graphviz.DotExecutable;
+import oozieviz.utils.Executable;
 import oozieviz.workflow.Workflow;
 import oozieviz.workflow.graph.Edge;
 import oozieviz.workflow.graph.Vertex;
@@ -22,12 +22,12 @@ import static oozieviz.workflow.job.JobProperties.newJobProperties;
 
 public final class OozieViz {
 
-    private DotExecutable dotExe;
+    private Executable dotExe;
     private PathResolver pathResolver;
     private Workflow workflow;
 
     public OozieViz givenDot(File dot) {
-        this.dotExe = new DotExecutable(dot);
+        this.dotExe = new Executable(dot);
         return this;
     }
 

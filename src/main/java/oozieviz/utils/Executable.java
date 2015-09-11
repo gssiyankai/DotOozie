@@ -1,27 +1,27 @@
-package oozieviz.utils.graphviz;
+package oozieviz.utils;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public final class DotExecutable {
+public final class Executable {
 
-    private final File dot;
+    private final File exe;
     private String[] args;
 
-    public DotExecutable(File dot) {
-        this.dot = dot;
+    public Executable(File exe) {
+        this.exe = exe;
     }
 
-    public DotExecutable withArguments(String... args) {
+    public Executable withArguments(String... args) {
         this.args = args;
         return this;
     }
 
-    public DotExecutable run() throws Exception {
+    public Executable run() throws Exception {
         List<String> commands = new LinkedList<>();
-        commands.add(dot.getAbsolutePath());
+        commands.add(exe.getAbsolutePath());
         commands.addAll(Arrays.asList(args));
         ProcessBuilder pb = new ProcessBuilder(commands);
         pb.redirectErrorStream(true);
