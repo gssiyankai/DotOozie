@@ -16,26 +16,26 @@ import static javax.xml.xpath.XPathConstants.NODE;
 
 public class GraphGenerator {
 
-    static final String WORKFLOW_APP = "workflow-app";
-    static final String START = "start";
-    static final String END = "end";
-    static final String AT = "@";
-    static final String NAME = "name";
-    static final String TO = "to";
-    static final String KILL = "kill";
-    static final String FORK = "fork";
-    static final String PATH = "path";
-    static final String JOIN = "join";
-    static final String ACTION = "action";
-    static final String SUB_WORKFLOW = "sub-workflow";
-    static final String APP_PATH = "app-path";
-    static final String OK = "ok";
-    static final String ERROR = "error";
-    static final String DECISION = "decision";
-    static final String SWITCH = "switch";
-    static final String CASE = "case";
-    static final String DEFAULT = "default";
-    static final String TEXT = "text()";
+    private static final String WORKFLOW_APP = "workflow-app";
+    private static final String START = "start";
+    private static final String END = "end";
+    private static final String AT = "@";
+    private static final String NAME = "name";
+    private static final String TO = "to";
+    private static final String KILL = "kill";
+    private static final String FORK = "fork";
+    private static final String PATH = "path";
+    private static final String JOIN = "join";
+    private static final String ACTION = "action";
+    private static final String SUB_WORKFLOW = "sub-workflow";
+    private static final String APP_PATH = "app-path";
+    private static final String OK = "ok";
+    private static final String ERROR = "error";
+    private static final String DECISION = "decision";
+    private static final String SWITCH = "switch";
+    private static final String CASE = "case";
+    private static final String DEFAULT = "default";
+    private static final String TEXT = "text()";
 
     private final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
     private final XPathFactory xPathFactory = XPathFactory.newInstance();
